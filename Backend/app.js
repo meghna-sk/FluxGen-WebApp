@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 
 const apartmentsRoutes = require('./routes/apartments-routes');
 const managersRoutes=require('./routes/managers-routes');
+const waterlevelRoutes=require('./routes/waterlevel-routes');
 
 const HttpError = require('./models/http-error');
 
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 
 app.use('/api/apartments', apartmentsRoutes); 
 app.use('/api/managers', managersRoutes);
+app.use('/api/waterlevel', waterlevelRoutes);
 
 
 app.use((req, res, next) => {

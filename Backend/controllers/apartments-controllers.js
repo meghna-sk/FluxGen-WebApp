@@ -66,40 +66,18 @@ const createApartment = async (req, res, next) => {
     );
   }
 
-  const { title, manager_id, threshold } = req.body;
-
+  const { title, manager_id, threshold, water_level } = req.body;
 
   const createdApartment = new Apartment({
     title,
     manager_id,
-    threshold
+    threshold,
+    water_level
   });
 
   let manager;
-
-  try{
-    manager= await Manager.findById(manager_id);
-
-  } catch(err){
-    const error = new HttpError('Creating apartment failed, please try again.', 500);
-    return next(error);
-  }
-
-  if(!manager){
-    const error= new HttpError('Could not find manager for provided Id.', 404);
-    return next(error);
-  }
-
-  console.log(manager);
-
   try {
-    const sess =  await mongoose.startSession();
-    sess.startTransaction();
-    await createdApartment.save({ session:sess });
-    manager.apartments.push(createdApartment);
-    await manager.save({session: sess});
-    await sess.commitTransaction();
-
+    manager = await Manager.findById(manager_id);
   } catch (err) {
     const error = new HttpError(
       'Creating apartment failed, please try again.',
@@ -108,7 +86,29 @@ const createApartment = async (req, res, next) => {
     return next(error);
   }
 
-  res.status(201).json({ place: createdApartment });
+  if (!manager) {
+    const error = new HttpError('Could not find manager for provided id.', 404);
+    return next(error);
+  }
+
+  console.log(manager);
+
+  try {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await createdApartment.save({ session: sess }); 
+    manager.apartments.push(createdApartment); 
+    await manager.save({ session: sess }); 
+    await sess.commitTransaction();
+  } catch (err) {
+    const error = new HttpError(
+      'Creating apartment failed, please try again.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(201).json({ apartment: createdApartment });
 };
 
 
@@ -119,7 +119,7 @@ const updateApartment = async (req, res, next) => {
     return next( new HttpError('Invalid inputs passed, please check your data.', 422));
   }
 
-  const { title, threshold } = req.body;
+  const { title, threshold, water_level } = req.body;
   const apartmentId = req.params.aid;
 
   let apartment;
@@ -135,6 +135,7 @@ const updateApartment = async (req, res, next) => {
 
   apartment.title = title;
   apartment.threshold = threshold;
+  apartment.water_level=water_level;
 
   try {
     await apartment.save();
@@ -191,3 +192,6 @@ exports.getApartmentByManagerId = getApartmentByManagerId;
 exports.createApartment = createApartment;
 exports.updateApartment = updateApartment;
 exports.deleteApartment = deleteApartment;
+
+
+

@@ -10,9 +10,9 @@ router.get('/:aid', apartmentsControllers.getApartmentById);
 
 router.get('/manager/:mid', apartmentsControllers.getApartmentByManagerId);
 
-router.post('/', [check('title').not().isEmpty(), check('manager_id').not().isEmpty(), check('threshold').not().isEmpty()], apartmentsControllers.createApartment);
+router.post('/', [check('title').not().isEmpty(), check('manager_id').not().isEmpty(), check('threshold').not().isEmpty(), check('water_level').not().isEmpty()], apartmentsControllers.createApartment);
 
-router.patch('/:aid', [check('title').not().isEmpty(), check('threshold').not().isEmpty()], apartmentsControllers.updateApartment);
+router.patch('/:aid', [check('title').not().isEmpty(), check('threshold').not().isEmpty(), check('water_level').not().isEmpty()], apartmentsControllers.updateApartment);
 
 router.delete('/:aid', apartmentsControllers.deleteApartment);
 
