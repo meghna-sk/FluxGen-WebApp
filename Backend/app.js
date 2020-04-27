@@ -4,9 +4,7 @@ var cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const apartmentsRoutes = require('./routes/apartments-routes');
-const managersRoutes=require('./routes/managers-routes');
-const waterlevelRoutes=require('./routes/waterlevel-routes');
+const waterlevelsRoutes=require('./routes/waterlevels-routes');
 
 const HttpError = require('./models/http-error');
 
@@ -16,9 +14,7 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
-app.use('/api/apartments', apartmentsRoutes); 
-app.use('/api/managers', managersRoutes);
-app.use('/api/waterlevel', waterlevelRoutes);
+app.use('/api/waterlevels', waterlevelsRoutes);
 
 
 app.use((req, res, next) => {
@@ -35,7 +31,7 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect('mongodb+srv://meghnak:12345@apartment-water-management1-3rjlm.azure.mongodb.net/FluxGenAWM?retryWrites=true&w=majority')
+  .connect('mongodb+srv://meghna:12345@fg-0fac7.azure.mongodb.net/water?retryWrites=true&w=majority')
   .then(()=>{
     
     app.listen(5000);

@@ -1,85 +1,36 @@
-import React, { useState, useCallback } from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect,
-  Switch
-} from 'react-router-dom';
+import React, { Component } from 'react';
+import { HashRouter, Route, Switch } from 'react-router-dom';
+// import { renderRoutes } from 'react-router-config';
+import './App.scss';
 
-import Managers from './manager/pages/Managers';
-import NewApartment from './apartments/pages/NewApartment';
-import ManagerApartments from './apartments/pages/ManagerApartments';
-import UpdateApartment from './apartments/pages/UpdateApartment';
-import Auth from './manager/pages/Auth';
-import MainNavigation from './shared/components/Navigation/MainNavigation';
-import { AuthContext } from './shared/context/auth-context';
+const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
 
-const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [managerId, setManagerId] = useState(false);
+// Containers
+const DefaultLayout = React.lazy(() => import('./containers/DefaultLayout'));
 
-  const login = useCallback(mid => {
-    setIsLoggedIn(true);
-    setManagerId(mid);
-  }, []);
+// Pages
+const Login = React.lazy(() => import('./views/Pages/Login'));
+const Register = React.lazy(() => import('./views/Pages/Register'));
+const Page404 = React.lazy(() => import('./views/Pages/Page404'));
+const Page500 = React.lazy(() => import('./views/Pages/Page500'));
 
-  const logout = useCallback(() => {
-    setIsLoggedIn(false);
-    setManagerId(null);
-  }, []);
+class App extends Component {
 
-  let routes;
-
-  if (isLoggedIn) {
-    routes = (
-      <Switch>
-        <Route path="/" exact>
-          <Managers />
-        </Route>
-        <Route path="/:managerId/apartments" exact>
-          <ManagerApartments />
-        </Route>
-        <Route path="/apartments/new" exact>
-          <NewApartment />
-        </Route>
-        <Route path="/apartments/:apartmentId">
-          <UpdateApartment />
-        </Route>
-        <Redirect to="/" />
-      </Switch>
-    );
-  } else {
-    routes = (
-      <Switch>
-        <Route path="/" exact>
-          <Managers />
-        </Route>
-        <Route path="/:managerId/apartments" exact>
-          <ManagerApartments />
-        </Route>
-        <Route path="/auth">
-          <Auth />
-        </Route>
-        <Redirect to="/auth" />
-      </Switch>
+  render() {
+    return (
+      <HashRouter>
+          <React.Suspense fallback={loading()}>
+            <Switch>
+              <Route exact path="/login" name="Login Page" render={props => <Login {...props}/>} />
+              <Route exact path="/register" name="Register Page" render={props => <Register {...props}/>} />
+              <Route exact path="/404" name="Page 404" render={props => <Page404 {...props}/>} />
+              <Route exact path="/500" name="Page 500" render={props => <Page500 {...props}/>} />
+              <Route path="/" name="Home" render={props => <DefaultLayout {...props}/>} />
+            </Switch>
+          </React.Suspense>
+      </HashRouter>
     );
   }
-
-  return (
-    <AuthContext.Provider
-      value={{
-        isLoggedIn: isLoggedIn,
-        managerId: managerId,
-        login: login,
-        logout: logout
-      }}
-    >
-      <Router>
-        <MainNavigation />
-        <main>{routes}</main>
-      </Router>
-    </AuthContext.Provider>
-  );
-};
+}
 
 export default App;

@@ -2,10 +2,19 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const waterlevelSchema = new Schema({
-    apartment_id:{type: mongoose.Types.ObjectId, required: true, ref: 'Apartment'},
-    water_level:{type: Number, required: true},
-    time_stamp:{type:Date, required: true}
-});
+const levelSchema = new Schema({
+    Date:{type: Date, required: true},
+    ID:{type: String, required: true},
+    Name:{type:String, required: true},
+    'Flow Factor':{type: Number, required: true},
+    Height:{type: Number, required: true},
+    Level:{type: Number, required: true},
+    'Max Capacity':{type: Number, required: true},
+    'Process Level':{type: Number, required: true},
+    Threshold:{type: Number, required: true}
+},
 
-module.exports = mongoose.model('WaterLevel',waterlevelSchema);
+{collection: 'level'}
+);
+
+module.exports = mongoose.model('WaterLevel', levelSchema);
