@@ -9,7 +9,7 @@ import {
   Card,
   CardBody,
   CardHeader,
-  CardFooter, 
+  //CardFooter, 
   CardTitle,
   Col,
   //Dropdown,
@@ -18,18 +18,18 @@ import {
   //DropdownToggle,
   Progress,
   Row,
-  Table,
+  //Table,
 } from 'reactstrap';
 import './dashboard.css'
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { getStyle, hexToRgba } from '@coreui/coreui/dist/js/coreui-utilities'
 
-const Widget03 = lazy(() => import('../../views/Widgets/Widget03'));
+//const Widget03 = lazy(() => import('../../views/Widgets/Widget03'));
 
-const brandPrimary = getStyle('--primary')
-const brandSuccess = getStyle('--success')
+//const brandPrimary = getStyle('--primary')
+//const brandSuccess = getStyle('--success')
 const brandInfo = getStyle('--info')
-const brandWarning = getStyle('--warning')
+//const brandWarning = getStyle('--warning')
 const brandDanger = getStyle('--danger')
 
 
@@ -146,7 +146,7 @@ class Dashboard extends Component {
     try {
       this.getData()
       this.getfromApi()
-      console.log(mainChartOpts)
+      //console.log(mainChartOpts)
       this.interval = setInterval(this.getData, 10000);
     } catch (err) {
       console.log(err.message); 
@@ -169,7 +169,7 @@ class Dashboard extends Component {
 
   getfromApi = async () => {
     let myheaders = {
-      "authorization": "" //Token is added here
+      "authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwdWJsaWNfaWQiOiI1NWQ0YzliZC01YzdiLTRmZjgtOGU2Yi01NGUzNzBhMGIxMjAiLCJleHAiOjE1ODgwMDM5Njh9.Ft1qcndujhZbA_Gr5v660vCybiwRy_NQ72HkuC598VQ" //Token is added here
     }
 
 
@@ -195,7 +195,6 @@ class Dashboard extends Component {
           ten_today=(water1.data.hours[9]['10.0'].process_consumption/1000)*100
           eleven_today=(water1.data.hours[10]['11.0'].process_consumption/1000)*100
           twelve_today=(water1.data.hours[11]['12.0'].process_consumption/1000)*100
-          console.log(eleven_today)
         })
         this.setState({totalConsumptionToday: totalconsumptiontoday, AM_7_today: seven_today.toFixed(2), AM_8_today:eight_today.toFixed(2), AM_9_today: nine_today.toFixed(2), AM_10_today: ten_today.toFixed(2), AM_11_today: eleven_today.toFixed(2), PM_12_today: twelve_today.toFixed(2)})
     } catch (err) {
@@ -226,7 +225,6 @@ class Dashboard extends Component {
           eleven_yesterday=(water2.data.hours[11]['11.0'].process_consumption/1000)*100
           twelve_yesterday=(water2.data.hours[12]['12.0'].process_consumption/1000)*100
         })
-        console.log(ten_yesterday)
         this.setState({totalConsumptionYesterday: totalconsumptionyesterday, AM_7_yesterday: seven_yesterday.toFixed(2), AM_8_yesterday:eight_yesterday.toFixed(2), AM_9_yesterday: nine_yesterday.toFixed(2), AM_10_yesterday: ten_yesterday.toFixed(2), AM_11_yesterday: eleven_yesterday.toFixed(2), PM_12_yesterday: twelve_yesterday.toFixed(2)})
     } catch (err) {
       console.log(err.message);
@@ -248,9 +246,8 @@ class Dashboard extends Component {
     } catch (err) {
       console.log(err.message);
     }
-    var water_consumed = 0
-    var water_left=0
-    this.setState({water_consumed:this.state.totalConsumptionToday+this.state.totalConsumptionYesterday, water_left: 50000-this.state.totalConsumptionToday+this.state.totalConsumptionYesterday })
+
+    this.setState({water_consumed:this.state.totalConsumptionToday+this.state.totalConsumptionYesterday, water_left: 60000-(this.state.totalConsumptionToday+this.state.totalConsumptionYesterday) })
   }
 
 
